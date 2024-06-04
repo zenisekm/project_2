@@ -1,8 +1,11 @@
 package cz.engeto.springproject.controller;
 
+import cz.engeto.springproject.UserDTO;
+import cz.engeto.springproject.UserMapper;
 import cz.engeto.springproject.entity.User;
 import cz.engeto.springproject.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,11 +24,6 @@ public class UserController {
         return userService.createUser(user);
     }
 
-    @GetMapping("/users/{id}")
-    public ResponseEntity<User> getUser(@PathVariable Long id) {
-        Optional<User> user = userService.getUserById(id);
-        return user.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
-    }
 
     @GetMapping("/users/{id}")
     public ResponseEntity<User> getUser(@PathVariable Long id) {
@@ -33,7 +31,6 @@ public class UserController {
         return userOptional.map(user -> ResponseEntity.ok(user))
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
-
 
 
     @PutMapping("/{id}")
@@ -46,6 +43,18 @@ public class UserController {
     public ResponseEntity<Void> deleteUser(@PathVariable Long id) {
         userService.deleteUser(id);
         return ResponseEntity.noContent().build();
+    }
+
+
+    @GetMapping("/{personId}")
+    public ResponseEntity<UserDTO> getUserByPersonId(@PathVariable String personId) {
+        User user = userService.findByPersonId(personId);
+        if (user != null) {
+            UserDTO userDTO = UserMapper.toDTO(user);
+            return new ResponseEntity<>(userDTO, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
     }
 
     }

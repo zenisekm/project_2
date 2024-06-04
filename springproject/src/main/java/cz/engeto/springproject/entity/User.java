@@ -60,4 +60,8 @@ public class User {
     public void setPersonId(String personId) {
         this.personId = personId;
     }
+
+    public String getPersonId() {
+        return personId;
+    }
 }
