@@ -47,4 +47,9 @@ public class UserService {
     public User findByPersonId(String personId) {
         return userRepository.findByPersonId(personId);
     }
+
+    public boolean existsByPersonId(String personId) {
+        return userRepository.existsByPersonId(personId);
+    }
+
 }

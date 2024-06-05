@@ -1,17 +1,14 @@
 package cz.engeto.springproject.entity;
 
 import javax.persistence.*;
+import java.util.UUID;
 
 @Entity
 @Table(name = "users", uniqueConstraints = @UniqueConstraint(columnNames = "personId"))
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-
     private Long id;
-
-    @Column(nullable = false, unique = true)
-    private String personId;
 
     @Column(nullable = false, unique = true)
     private String username;
@@ -22,12 +19,24 @@ public class User {
     @Column(nullable = false)
     private String role;
 
+    @Column(nullable = false, unique = true)
+    private String personId;
+
+    @Column(nullable = false, unique = true)
+    private String uuid;
+
+    @PrePersist
+    public void prePersist() {
+        if (uuid == null) {
+            uuid = UUID.randomUUID().toString();
+        }
+    }
+
+    // Getters and Setters
 
     public Long getId() {
         return id;
     }
-
-
 
     public void setId(Long id) {
         this.id = id;
@@ -57,11 +66,21 @@ public class User {
         this.role = role;
     }
 
+    public String getPersonId() {
+        return personId;
+    }
+
     public void setPersonId(String personId) {
         this.personId = personId;
     }
 
-    public String getPersonId() {
-        return personId;
+    public String getUuid() {
+        return uuid;
     }
+
+    public void setUuid(String uuid) {
+        this.uuid = uuid;
+    }
+
 }
+
